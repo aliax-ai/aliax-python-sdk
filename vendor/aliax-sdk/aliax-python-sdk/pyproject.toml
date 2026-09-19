@@ -1,0 +1,67 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "aliax"
+dynamic = ["version"]
+description = "Aliax SDK — real-time interceptor middleware for visual web agents (Set-of-Mark + deterministic execution)."
+readme = "README.md"
+requires-python = ">=3.8"
+license = { file = "LICENSE" }
+authors = [{ name = "Aliax", email = "hello@aliax.xyz" }]
+keywords = [
+    "ai", "agents", "web-agents", "playwright", "vlm",
+    "set-of-mark", "browser-automation", "llm-tools",
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Typing :: Typed",
+]
+dependencies = [
+    # Zero image-processing deps on purpose. Box drawing happens in the
+    # bundled JS overlay (Chromium renders it natively); screenshot
+    # encoding happens inside Playwright's C++ CDP path — so the SDK
+    # never pulls Pillow / OpenCV / Cairo into the customer's venv.
+    "httpx>=0.24,<2",
+    "playwright>=1.30,<2",
+]
+
+[project.urls]
+Homepage = "https://aliax.xyz"
+Documentation = "https://aliax.xyz/docs"
+Source = "https://github.com/aliax/aliax-sdk"
+Tracker = "https://github.com/aliax/aliax-sdk/issues"
+Changelog = "https://github.com/aliax/aliax-sdk/blob/main/CHANGELOG.md"
+
+[project.optional-dependencies]
+test = [
+    "pytest>=7",
+    "pytest-asyncio>=0.21",
+    "respx>=0.20",
+]
+
+[tool.setuptools.dynamic]
+version = { attr = "aliax._version.__version__" }
+
+[tool.setuptools.packages.find]
+include = ["aliax*"]
+
+[tool.setuptools.package-data]
+aliax = ["dom-mapper.dat", "py.typed"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
